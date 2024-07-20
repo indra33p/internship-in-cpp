@@ -1,0 +1,101 @@
+#include <iostream>
+#include <string>
+#include <vector>
+using namespace std;
+class Task {
+private:
+    string name;        
+    string description; 
+    string dueDate;     
+    bool completed;     
+public:
+    Task(const string& name,
+    const string& description, 
+    const string& dueDate)
+        : name(name), 
+        description(description), 
+        dueDate(dueDate), 
+        completed(false) {}
+    string getName() const { return name; }
+    
+    string getDescription() const { return description; }
+    
+    string getDueDate() const { return dueDate; }
+    
+    bool isCompleted() const { return completed; }
+    
+    void setName(const string& name) { this->name = name; }
+    
+    void setDescription(const string& description) { this->description = description; }
+    
+    void setDueDate(const string& dueDate) { this->dueDate = dueDate; }
+    
+    void markCompleted() { completed = true; }
+    
+    void displayTask() const {
+        cout << name << " (" << (completed ? "Completed" : "Pending") << ")\n";
+        cout << "Description: " << description << "\n";
+        cout << "Due Date: " << dueDate << "\n";
+    }
+};
+class ToDoList {
+private:
+    vector<Task> tasks;
+public:
+    void addTask(const Task& task) {
+        tasks.push_back(task);
+        cout << "Task added successfully!\n";
+    }
+    void viewTasks() const {
+        if (tasks.empty()) {
+            cout << "No tasks found.\n";
+        } else {
+            cout << "Tasks:\n";
+            for (const Task& task : tasks) {
+                task.displayTask();
+                cout << "------------------------\n";
+            }
+        }
+    }
+    void deleteTask(int index) {
+        if (index >= 0 && index < tasks.size()) {
+            tasks.erase(tasks.begin() + index);
+            cout << "Task deleted successfully!\n";
+        } else {
+            cout << "Invalid task index.\n";
+        }
+    }
+};
+int main() {
+    ToDoList toDoList;
+    while (true) {
+        cout << "\nMenu:\n1. Add Task\n2. View Tasks\n3. Delete Task\n4. Exit\n";
+        int choice;
+        cin >> choice;
+        if (choice == 1) {
+            string name, description, dueDate;
+            cout << "Enter task name: ";
+            cin.ignore();
+            getline(cin, name);
+            cout << "Enter task description: ";
+            getline(cin, description);
+            cout << "Enter due date: ";
+            cin >> dueDate;
+            Task newTask(name, description, dueDate);
+            toDoList.addTask(newTask);
+        } else if (choice == 2) {
+            toDoList.viewTasks();
+        } else if (choice == 3) {
+            int index;
+            cout << "Enter task index to delete: ";
+            cin >> index;
+            toDoList.deleteTask(index);
+        } else if (choice == 4) {
+            cout << "Exiting. Have a great day!\n";
+            break;
+        } else {
+            cout << "Invalid choice. Try again.\n";
+        }
+    }
+    return 0;
+}
